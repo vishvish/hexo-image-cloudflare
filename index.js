@@ -14,6 +14,7 @@ const cdn_prefix = native_resize ? "/cdn-cgi/image/" : (cdn_server + "/?");
 const use_webp = !native_resize && hexo.config.cdn_use_webp || (hexo.config.cdn && hexo.config.cdn.use_webp) || false;
 const max_width = hexo.config.cdn && hexo.config.cdn.max_width;
 const exclude_domains = hexo.config.cdn && hexo.config.cdn.exclude_domains;
+const enabled = hexo.config.cdn && hexo.config.cdn.enabled
 const { unescapeHTML } = require('hexo-util');
 
 var max_widths;
@@ -30,6 +31,9 @@ max_widths.push(null);
 
 function cdn_link(link, output = null, width = null) {
   link = unescapeHTML(link);
+  if (enabled == false) {
+    return link;
+  }
   if (exclude_domains && exclude_domains.some((domain) => link.startsWith(domain))) {
     // skip using cdns
     return link;
